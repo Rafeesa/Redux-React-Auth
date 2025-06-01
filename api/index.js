@@ -12,6 +12,7 @@ mongoose.connect(process.env.MONGO).then(()=>{
 })
 
 const app=express();
+app.use(express.json())
 
 
 app.listen(3000,()=>{
