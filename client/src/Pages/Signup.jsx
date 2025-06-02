@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -10,6 +11,7 @@ const Signup = () => {
   });
 
   const [errors, setErrors] = useState({});
+  const navigate=useNavigate()
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
@@ -55,13 +57,19 @@ const Signup = () => {
       )
       const data=await res.json()
       console.log(data)
+       if (!res.ok) {
+        // 👇 Show backend error message
+        setErrors({ general: data.message });
+        return;
+      }
+      navigate("/login")
     } else {
       console.log("Validation failed!");
     }
   };
 
   return (
-    <div className='p-3 max-w-lg mx-auto'>
+    <div className='p-3 max-w-lg mx-auto mt-20'>
       <h1 className='text-center text-3xl font-semibold my-7'>Sign Up</h1>
       <form className='flex flex-col gap-3' onSubmit={handleSubmit}>
         <input
@@ -81,6 +89,10 @@ const Signup = () => {
           onChange={handleChange}
         />
         {errors.email && <p className='text-red-500 text-sm'>{errors.email}</p>}
+        {errors.general && (
+  <p className='text-red-500 text-sm '>{errors.general}</p>
+)}
+
 
         <input
           type='text'

@@ -4,20 +4,29 @@ import bcryptjs from "bcryptjs"
 import jwt from "jsonwebtoken"
 
 
-export const signup = async (req, res,next) => {
-    console.log("signup hitched")
-  
-  const { username, email,phone,password } = req.body;
-  const hashedPassword=bcryptjs.hashSync(password,10)
-  const newUser = new User({ username, email,phone,password:hashedPassword });
+export const signup = async (req, res, next) => {
+  console.log("signup hitched");
+
+  const { username, email, phone, password } = req.body;
 
   try {
+    
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return next(errorHandler(400, "Email is already registered"));
+    }
+
+    const hashedPassword = bcryptjs.hashSync(password, 10);
+    const newUser = new User({ username, email, phone, password: hashedPassword });
+
     await newUser.save();
     res.status(201).json({ message: "User created successfully" });
+
   } catch (err) {
-    next(err)
+    next(err);
   }
 };
+
 
 export const signin=async (req,res,next)=>
 {
