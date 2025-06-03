@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-
-
+import { signInSuccess } from '../redux/user/userSlice';
+import { useDispatch } from 'react-redux';
 
 const Signin = () => {
   const [formData, setFormData] = useState({
@@ -11,6 +11,7 @@ const Signin = () => {
 
   const [errors, setErrors] = useState({});
   const navigate=useNavigate()
+  const dispatch=useDispatch()
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
@@ -47,7 +48,13 @@ const Signin = () => {
 
       )
       const data=await res.json()
+      dispatch(signInSuccess(data))
       console.log(data)
+        if (!res.ok) {
+        // 👇 Show backend error
+        setErrors({ server: data.message });
+        return;
+      }
       navigate("/")
     } else {
       console.log("Validation failed!");
@@ -77,6 +84,10 @@ const Signin = () => {
           onChange={handleChange}
         />
         {errors.password && <p className='text-red-500 text-sm'>{errors.password}</p>}
+        {errors.server && (
+  <p className='text-red-500 text-sm'>{errors.server}</p>
+)}
+
 
         <button className='bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95'>
           Sign in

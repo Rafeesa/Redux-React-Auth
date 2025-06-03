@@ -90,7 +90,7 @@ const Signup = () => {
         />
         {errors.email && <p className='text-red-500 text-sm'>{errors.email}</p>}
         {errors.general && (
-  <p className='text-red-500 text-sm '>{errors.general}</p>
+  <p className='text-red-500 text-sm'>{errors.general}</p>
 )}
 
 
