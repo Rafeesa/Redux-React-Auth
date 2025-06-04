@@ -6,6 +6,10 @@ import SignUp from "./Pages/Signup"
 import Profile from "./Pages/Profile"
 import Header from './components/Header'
 import PrivateRoute from './components/privateRoute'
+import AdminDashboard from './Pages/AdminDashboard'; 
+import AdminRoute from './components/AdminRoute'
+import UserManagement from './Pages/UserManagement'; 
+
 
 const App = () => {
   return (
@@ -17,9 +21,12 @@ const App = () => {
       <Route path="/login" element={<Signin />}></Route>
       <Route path="/signUp" element={<SignUp />}></Route>
       <Route element={<PrivateRoute />}>
-      <Route path="/profile" element={<Profile />}></Route>
+      <Route path="/profile" element={<Profile />} />
       </Route>
-      
+      <Route element={<AdminRoute />}>
+    <Route path="/admin" element={<AdminDashboard />} />
+     <Route path="/admin/users" element={<UserManagement />} />
+  </Route>
     </Routes>
     </BrowserRouter>
     

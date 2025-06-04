@@ -33,33 +33,40 @@ const Signin = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = async(e) => {
-    e.preventDefault();
+ const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    if (validate()) {
-      console.log("Form submitted!", formData);
-      const res=await fetch("/api/auth/login",{
-        method:"POST",
-        headers:{
-          "Content-Type":"application/json"
-        },
-        body:JSON.stringify(formData)
-      }
+  if (validate()) {
+    console.log("Form submitted!", formData);
+    const res = await fetch("/api/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(formData)
+    });
 
-      )
-      const data=await res.json()
-      dispatch(signInSuccess(data))
-      console.log(data)
-        if (!res.ok) {
-        // 👇 Show backend error
-        setErrors({ server: data.message });
-        return;
-      }
-      navigate("/")
-    } else {
-      console.log("Validation failed!");
+    const data = await res.json();
+    
+    if (!res.ok) {
+      // Show backend error
+      setErrors({ server: data.message });
+      return;
     }
-  };
+
+    dispatch(signInSuccess(data));
+    console.log(data);
+
+    if (data.isAdmin) {
+      navigate("/admin"); // Admin dashboard
+    } else {
+      navigate("/"); // Regular user homepage
+    }
+  } else {
+    console.log("Validation failed!");
+  }
+};
+
 
   return (
     <div className='p-3 max-w-lg mx-auto mt-20' >

@@ -54,3 +54,24 @@ export const signin=async (req,res,next)=>
 export const signout = (req, res) => {
   res.clearCookie('access_token').status(200).json('Signout success!');
 };
+
+export const loginAdmin = async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const user = await User.findOne({ email });
+    if (!user || !user.isAdmin) {
+      return res.status(403).json({ message: 'Access denied' });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) return res.status(401).json({ message: 'Invalid credentials' });
+
+    const token = jwt.sign({ id: user._id, isAdmin: user.isAdmin }, process.env.JWT_SECRET, {
+      expiresIn: '1d',
+    });
+
+    res.status(200).json({ token, isAdmin: user.isAdmin });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};

@@ -1,12 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { useRef, useState, useEffect } from 'react';
 import defaultAvatar from "../assets/profileavathar.jpg"
-import {
-
-  updateUserSuccess,
-  signOut
- 
-} from '../redux/user/userSlice';
+import {updateUserSuccess, signOut} from '../redux/user/userSlice';
 
 export default function Profile() {
   const dispatch = useDispatch();
