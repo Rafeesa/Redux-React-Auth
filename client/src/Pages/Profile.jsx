@@ -4,6 +4,7 @@ import defaultAvatar from "../assets/profileavathar.jpg"
 import {
 
   updateUserSuccess,
+  signOut
  
 } from '../redux/user/userSlice';
 
@@ -64,7 +65,16 @@ export default function Profile() {
     } catch (error) {
      console.log(error)
     }
+    
   };
+   const handleSignOut = async () => {
+    try {
+      await fetch('/api/auth/signout');
+      dispatch(signOut())
+    } catch (error) {
+      console.log(error);
+    }
+  }
 console.log(formData)
   return (
     <div className='p-3 max-w-lg mx-auto'>
@@ -110,6 +120,12 @@ console.log(formData)
           Update
         </button>
       </form>
+       <div className='flex justify-between mt-5'>
+       
+        <span onClick={handleSignOut} className='text-red-700 cursor-pointer'>
+          Sign out
+        </span>
+      </div>
       <p className='text-green-700 mt-5'>
         {updateSuccess && 'User is updated successfully!'}
       </p>
